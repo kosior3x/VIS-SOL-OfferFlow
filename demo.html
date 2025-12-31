@@ -1,0 +1,91 @@
+<div class="contact-wrapper">
+<main class="main">
+    <h1>Witaj, <span style="color: var(--accent);">Kamil</span></h1>
+    <p class="subtitle">System operacyjny VIS-SOL gotowy do generowania dokumentacji.</p>
+
+    <div class="about-grid">
+        <div class="about-card"><small>Przychód</small><span id="stat-rev" class="val">0 PLN</span></div>
+        <div class="about-card"><small>Dokumenty</small><span id="stat-count" class="val">0</span></div>
+    </div>
+
+    <section class="competency-card">
+        <h3>Nowa Oferta Handlowa</h3>
+        <input type="text" id="inp-client" placeholder="Nazwa Klienta">
+        <input type="number" id="inp-val" placeholder="Wartość Netto">
+        <button class="btn btn-primary" onclick="addOffer()">Uruchom Proces</button>
+    </section>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr><th>NR DOKUMENTU</th><th>KONTRAHENT</th><th>STATUS</th><th>KWOTA</th><th>AKCJA</th></tr>
+            </thead>
+            <tbody id="list"></tbody>
+        </table>
+    </div>
+</main>
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('vissol_db')) || [];
+    const API_URL = "https://vis-sol-offerflow.onrender.com";
+
+    function addOffer() {
+        const client = document.getElementById('inp-client').value;
+        const val = parseFloat(document.getElementById('inp-val').value);
+        if(!client || !val) return alert("Uzupełnij dane!");
+
+        const nr = `OH/${String(db.length + 1).padStart(3, '0')}/${new Date().getMonth()+1}/2025`;
+        db.unshift({ id: Date.now(), nr, client, val, date: new Date().toLocaleDateString() });
+        localStorage.setItem('vissol_db', JSON.stringify(db));
+
+        document.getElementById('inp-client').value = '';
+        document.getElementById('inp-val').value = '';
+        render();
+    }
+
+    async function generatePDF(id) {
+        const o = db.find(x => x.id == id);
+        const btn = event.target;
+        btn.innerText = "⏳";
+
+        try {
+            const response = await fetch(`${API_URL}/api/generate-pdf`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ client: o.client, val: o.val, nr: o.nr })
+            });
+
+            if (!response.ok) throw new Error();
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Oferta_${o.client}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            btn.innerText = "📄";
+        } catch (e) {
+            alert("Błąd silnika PDF. Sprawdź czy Render jest aktywny!");
+            btn.innerText = "📄";
+        }
+    }
+
+    function render() {
+        const list = document.getElementById('list');
+        list.innerHTML = db.map(o => `
+            <tr>
+                <td>${o.nr}</td>
+                <td><strong>${o.client}</strong></td>
+                <td><span class="status-badge">GOTOWA</span></td>
+                <td>${o.val.toLocaleString()} PLN</td>
+                <td><button onclick="generatePDF(${o.id})" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">📄</button></td>
+            </tr>
+        `).join('');
+        document.getElementById('stat-rev').innerText = db.reduce((s, o) => s + o.val, 0).toLocaleString() + ' PLN';
+        document.getElementById('stat-count').innerText = db.length;
+    }
+
+    render();
+</script>
