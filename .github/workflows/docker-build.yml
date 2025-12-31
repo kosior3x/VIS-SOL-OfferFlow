@@ -1,0 +1,15 @@
+name: Docker Build Check
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kodu
+        uses: actions/checkout@v3
+      - name: Budowanie obrazu Docker
+        run: docker build -t vissol-reaktor .
+      - name: Sukces
+        run: echo "Alex: Kontener VIS-SOL został zbudowany pomyślnie!"
+        
