@@ -1,18 +1,19 @@
-# Wybieramy lekki obraz Pythona
 FROM python:3.9-slim
 
-# Ustawiamy katalog roboczy wewnątrz kontenera
+# Ustawienie katalogu roboczego
 WORKDIR /app
 
-# Kopiujemy listę bibliotek i instalujemy je
+# Kopiowanie plików konfiguracji
 COPY requirements.txt .
+
+# Instalacja z wymuszeniem braku cache (żeby uniknąć błędów)
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiujemy resztę plików (app.py)
+# Kopiowanie reszty kodu
 COPY . .
 
-# Informujemy, na jakim porcie działa nasza aplikacja
+# Wystawienie portu
 EXPOSE 5000
 
-# Komenda uruchamiająca silnik
+# Start aplikacji
 CMD ["python", "app.py"]
