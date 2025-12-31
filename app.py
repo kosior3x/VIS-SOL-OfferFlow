@@ -5,7 +5,11 @@ from reportlab.lib.pagesizes import A4
 import io
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["https://vis-sol-offerflow.onrender.com", "http://vis-sol.prv.pl", "https://vis-sol.prv.pl"]}})
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "ok"}), 200
 
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
@@ -18,16 +22,19 @@ def generate_pdf():
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
     
-    # Nagłówek VIS-SOL
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 800, "OFERTA HANDLOWA: " + nr)
+    # Nagłówek VIS-SOL 2.0
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(72, 800, "VIS-SOL 2.0")
     p.setFont("Helvetica", 12)
-    p.drawString(100, 780, "Podmiot: VIS-SOL (vis-sol.prv.pl)")
+    p.drawString(72, 780, "OFERTA HANDLOWA: " + nr)
     
-    # Dane klienta i wycena
-    p.line(100, 770, 500, 770)
-    p.drawString(100, 740, f"Kontrahent: {client}")
-    p.drawString(100, 720, f"Kwota netto: {val} PLN")
+    # Tabela z danymi
+    p.line(70, 750, 525, 750)
+    p.drawString(75, 725, f"Kontrahent:")
+    p.drawString(250, 725, f"{client}")
+    p.drawString(75, 700, f"Wartość netto:")
+    p.drawString(250, 700, f"{val} PLN")
+    p.line(70, 680, 525, 680)
     
     # Klauzula BASS i Tajemnica
     p.setFont("Helvetica-Oblique", 10)
