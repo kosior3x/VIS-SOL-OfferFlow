@@ -3,9 +3,18 @@ from flask_cors import CORS
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 import io
+import json
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return send_from_directory('.', 'dashboard.html')
 
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
@@ -40,9 +49,12 @@ def generate_pdf():
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name=f"Oferta_{client}.pdf", mimetype='application/pdf')
 
-@app.route('/preview')
-def preview():
-    return send_from_directory('.', 'test.html')
+@app.route('/api/submit-form', methods=['POST'])
+def submit_form():
+    data = request.json
+    print("Received form submission:")
+    print(json.dumps(data, indent=2))
+    return jsonify({"success": True, "message": "Form submitted successfully!"})
 
 @app.route('/generate-test-pdf')
 def generate_test_pdf():
