@@ -92,7 +92,7 @@
         const val = parseFloat(document.getElementById('inp-val').value);
         if(!client || !val) return alert("Uzupełnij dane!");
 
-        const nr = `OH/${String(db.length + 1).padStart(3, '0')}/${new Date().getMonth()+1}/2025`;
+        const nr = `OH/${String(db.length + 1).padStart(3, '0')}/${new Date().getMonth()+1}/2026`;
         db.unshift({ id: Date.now(), nr, client, val, date: new Date().toLocaleDateString() });
         localStorage.setItem('vissol_db', JSON.stringify(db));
         
@@ -107,10 +107,10 @@
         btn.innerText = "⏳";
 
         try {
-            const response = await fetch(`${API_URL}/api/generate-pdf`, {
+            const response = await fetch(`${API_URL}/api/generate`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ client: o.client, val: o.val, nr: o.nr })
+                body: JSON.stringify({ tool_id: 'generator-ofert', client: o.client, val: o.val, nr: o.nr })
             });
 
             if (!response.ok) throw new Error();
