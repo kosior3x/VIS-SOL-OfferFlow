@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, send_from_directory
 from flask_cors import CORS
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -39,6 +39,30 @@ def generate_pdf():
     
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name=f"Oferta_{client}.pdf", mimetype='application/pdf')
+
+@app.route('/preview')
+def preview():
+    return send_from_directory('.', 'test.html')
+
+@app.route('/generate-test-pdf')
+def generate_test_pdf():
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, 800, "TESTOWY DOKUMENT PDF")
+    p.setFont("Helvetica", 12)
+    p.drawString(100, 780, "Wygenerowano z Vis-Flow")
+
+    p.line(100, 770, 500, 770)
+    p.drawString(100, 740, "To jest testowy dokument PDF.")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name="Testowy.pdf", mimetype='application/pdf')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
