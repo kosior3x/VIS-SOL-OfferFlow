@@ -1,68 +1,33 @@
-from flask import Flask, request, send_file, jsonify, send_from_directory
-from flask_cors import CORS
+import os
+from flask import Flask, render_template, request, send_file
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-import io
+import requests
 
 app = Flask(__name__)
-CORS(app)
 
-@app.route('/api/generate-pdf', methods=['POST'])
-def generate_pdf():
-    data = request.json
-    client = data.get('client', 'Klient')
-    val = data.get('val', 0)
-    nr = data.get('nr', 'DOK/001')
+# Pobieranie klucza z ustawień Render (Environment Variables)
+REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
 
-    # Tworzenie pliku PDF w pamięci RAM
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/process', methods=['POST'])
+def process():
+    data = request.form.get('map_data', 'Brak danych')
+    client = request.form.get('client_name', 'Vis-Sol')
     
-    # Nagłówek VIS-SOL
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 800, "OFERTA HANDLOWA: " + nr)
-    p.setFont("Helvetica", 12)
-    p.drawString(100, 780, "Podmiot: VIS-SOL (vis-sol.prv.pl)")
+    # Tworzenie PDF
+    pdf_path = "oferta_vis_sol.pdf"
+    c = canvas.Canvas(pdf_path)
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, 800, f"OFERTA: {client}")
+    c.setFont("Helvetica", 10)
+    c.drawString(50, 780, f"Dane mapowania: {data[:100]}...")
+    c.save()
     
-    # Dane klienta i wycena
-    p.line(100, 770, 500, 770)
-    p.drawString(100, 740, f"Kontrahent: {client}")
-    p.drawString(100, 720, f"Kwota netto: {val} PLN")
-    
-    # Klauzula BASS i Tajemnica
-    p.setFont("Helvetica-Oblique", 10)
-    p.drawString(100, 150, "Dokument wygenerowany automatycznie przez system Alex BASS.")
-    p.drawString(100, 135, "TAJEMNICA HANDLOWA VIS-SOL - DOSTĘP ZASTRZEŻONY.")
+    return send_file(pdf_path, as_attachment=True)
 
-    p.showPage()
-    p.save()
-    
-    buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name=f"Oferta_{client}.pdf", mimetype='application/pdf')
-
-@app.route('/preview')
-def preview():
-    return send_from_directory('.', 'test.html')
-
-@app.route('/generate-test-pdf')
-def generate_test_pdf():
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 800, "TESTOWY DOKUMENT PDF")
-    p.setFont("Helvetica", 12)
-    p.drawString(100, 780, "Wygenerowano z Vis-Flow")
-
-    p.line(100, 770, 500, 770)
-    p.drawString(100, 740, "To jest testowy dokument PDF.")
-
-    p.showPage()
-    p.save()
-
-    buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name="Testowy.pdf", mimetype='application/pdf')
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
