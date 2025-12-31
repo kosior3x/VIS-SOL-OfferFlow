@@ -26,18 +26,18 @@ def generate_pdf():
     # Tworzenie pliku PDF w pamięci RAM
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
-    
+
     # Nagłówek VIS-SOL
     p.setFont("Helvetica-Bold", 16)
     p.drawString(100, 800, "OFERTA HANDLOWA: " + nr)
     p.setFont("Helvetica", 12)
     p.drawString(100, 780, "Podmiot: VIS-SOL (vis-sol.prv.pl)")
-    
+
     # Dane klienta i wycena
     p.line(100, 770, 500, 770)
     p.drawString(100, 740, f"Kontrahent: {client}")
     p.drawString(100, 720, f"Kwota netto: {val} PLN")
-    
+
     # Klauzula BASS i Tajemnica
     p.setFont("Helvetica-Oblique", 10)
     p.drawString(100, 150, "Dokument wygenerowany automatycznie przez system Alex BASS.")
@@ -45,7 +45,7 @@ def generate_pdf():
 
     p.showPage()
     p.save()
-    
+
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name=f"Oferta_{client}.pdf", mimetype='application/pdf')
 
