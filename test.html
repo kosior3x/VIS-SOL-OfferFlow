@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS-SOL – Intelligent Visual Solutions</title>
+    <meta name="description" content="Wizualizacje danych, interfejsy przyszłości i rozwiązania AI wspierające decyzje biznesowe.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --text: #e0f0ff;
+            --accent: #00f0ff;
+            --accent-dark: #00b4cc;
+            --glass: rgba(10, 20, 40, 0.85);
+            --border: rgba(0, 240, 255, 0.25);
+            --glow: 0 0 15px rgba(0, 240, 255, 0.7);
+            --overlay-bg: rgba(5, 10, 20, 0.97);
+            --success: #00ff9d;
+            --warning: #ffaa00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        #ai-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .neuron {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: var(--glow);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.2; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.5); }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 14, 23, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 5vw;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-shadow: var(--glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5vw 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 9vw, 6.5rem);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #00f0ff, #a5f3fc, #00f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: title-glow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes title-glow {
+            0% { filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3)); }
+            100% { filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.7)); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            max-width: 750px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        .tagline {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem 2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .tagline span {
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .tagline span:hover {
+            background: rgba(0, 240, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .btn {
+            padding: 1.1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: #00d4e6;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.8);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-case {
+            background: var(--warning);
+            color: #000;
+            box-shadow: 0 0 25px rgba(255, 170, 0, 0.4);
+        }
+
+        .btn-case:hover {
+            background: #ffbb33;
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(255, 170, 0, 0.6);
+        }
+
+        /* Sections */
+        .section {
+            padding: 7rem 5vw;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.3rem, 6vw, 4rem);
+            margin-bottom: 4.5rem;
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            box-shadow: var(--glow);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+        }
+
+        .about-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .about-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        /* Competencies Section - Interactive Cards */
+        .competencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .competency-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .competency-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .competency-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .competency-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(0, 240, 255, 0.2);
+        }
+
+        .competency-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .competency-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .competency-card .short-desc {
+            opacity: 0.9;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .competency-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .overlay-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0.8rem 0;
+        }
+
+        .overlay-trigger:hover {
+            text-decoration: underline;
+        }
+
+        .case-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--warning);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .case-trigger:hover {
+            background: rgba(255, 170, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+        }
+
+        /* Case Study CTA Section */
+        .case-cta {
+            background: linear-gradient(135deg, rgba(5, 10, 20, 0.9), rgba(10, 20, 40, 0.9));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 4rem 0;
+            padding: 4rem 5vw;
+            text-align: center;
+        }
+
+        .case-cta h3 {
+            color: var(--warning);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .case-cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Overlay Styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .overlay.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay-content {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: overlayAppear 0.4s ease-out;
+        }
+
+        @keyframes overlayAppear {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-overlay {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-overlay:hover {
+            background: rgba(0, 240, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .overlay-content h2 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+        }
+
+        .overlay-case h2 {
+            color: var(--warning);
+        }
+
+        .overlay-content h3 {
+            color: var(--text);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .overlay-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .overlay-list li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .overlay-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Case Form Styles */
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 170, 0, 0.2);
+        }
+
+        .form-icon {
+            font-size: 2.5rem;
+            color: var(--warning);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: #000;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 1rem;
+            vertical-align: middle;
+        }
+
+        .form-note {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .form-note strong {
+            color: var(--warning);
+        }
+
+        .case-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        .form-group label .required {
+            color: var(--warning);
+        }
+
+        input, textarea, select {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--warning);
+            box-shadow: 0 0 0 3px rgba(255, 170, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 1rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 0.2rem;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            background: var(--glass);
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            position: relative;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 240, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .portfolio-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.03);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(0, 240, 255, 0.25);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .portfolio-item:hover .portfolio-image {
+            transform: scale(1.05);
+        }
+
+        .portfolio-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .portfolio-item:hover .portfolio-caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Contact Section */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            padding: 2.5rem;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .contact-info h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+        }
+
+        .contact-details {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .contact-details li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-details li i {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 5rem 1rem 3rem;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .footer-cta {
+            margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding: 7rem 5vw 3rem;
+            }
+
+            .section {
+                padding: 5rem 5vw;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .competencies-grid, .portfolio-grid, .about-grid {
+                gap: 2rem;
+            }
+
+            .overlay-content {
+                padding: 2rem;
+                width: 95%;
+            }
+
+            .contact-wrapper {
+                gap: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .competency-card {
+                min-height: 300px;
+            }
+
+            .competency-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.2rem, 8vw, 3rem);
+            }
+
+            .tagline {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .tagline span {
+                width: 100%;
+                text-align: center;
+            }
+
+            .competency-card {
+                min-height: 280px;
+                padding: 2rem 1.5rem;
+            }
+
+            .case-cta {
+                padding: 3rem 5vw;
+            }
+
+            .case-cta h3 {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 640px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 14, 23, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                border-top: 1px solid var(--border);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated AI Background -->
+    <div id="ai-background"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">VIS-SOL</div>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="#o-nas">O nas</a>
+                <a href="#kompetencje">Kompetencje</a>
+                <a href="#realizacje">Realizacje</a>
+                <!-- DODANY LINK DO DEMO -->
+                <a href="demo.html" style="color: var(--warning); font-weight: 600;">🧪 Piaskownica Demo</a>
+                <a href="#kontakt">Kontakt</a>
+                <a href="#" class="btn-case" id="globalCaseTrigger" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">🎯 Projekt Case</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">INTELLIGENT<br>VISUAL SOLUTIONS</h1>
+            <p class="hero-subtitle">
+                Wizualizacje danych • Interfejsy przyszłości • AI wspierające decyzje biznesowe
+            </p>
+            <div class="tagline">
+                <span>Data Storytelling</span>
+                <span>Predictive Dashboards</span>
+                <span>AI Decision Support</span>
+            </div>
+            <div class="cta-group">
+                <a href="#kompetencje" class="btn btn-primary">Poznaj kompetencje</a>
+                <a href="/generate-test-pdf" class="btn btn-secondary">Generuj Testowy PDF</a>
+                <a href="#" class="btn btn-case" id="heroCaseTrigger">🎯 Prześlij projekt case</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="o-nas">
+        <h2 class="section-title">O nas</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; opacity: 0.9; line-height: 1.7;">
+            Vis-Sol to firma specjalizująca się w tworzeniu dedykowanych rozwiązań informatycznych.<br>
+            Jesteśmy zwolennikami pracy dla klienta – w każdym projekcie stawiamy na indywidualne podejście i pełne zrozumienie Twoich potrzeb. Nasze doświadczenie obejmuje szeroki zakres technologii i branż, a każde rozwiązanie tworzymy tak, aby w 100% spełniało Twoje oczekiwania.
+        </p>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3>Indywidualność</h3>
+                <p>Każdy projekt szyjemy na miarę</p>
+            </div>
+            <div class="about-card">
+                <h3>Zespół</h3>
+                <p>Doświadczeni specjaliści IT</p>
+            </div>
+            <div class="about-card">
+                <h3>Jakość</h3>
+                <p>Najwyższe standardy realizacji</p>
+            </div>
+            <div class="about-card">
+                <h3>Wsparcie</h3>
+                <p>Pełne wsparcie techniczne</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competencies Section -->
+    <section class="section" id="kompetencje">
+        <h2 class="section-title">Kompetencje</h2>
+        <p style="text-align: center; max-width: 600px; margin: -2rem auto 4rem; opacity: 0.8;">
+            Kliknij w wybraną kompetencję, aby poznać szczegóły naszej oferty
+        </p>
+        <div class="competencies-grid">
+            <!-- WWW -->
+            <div class="competency-card" data-overlay="www">
+                <div class="competency-icon">🌐</div>
+                <h3>Strony WWW</h3>
+                <p class="short-desc">Nowoczesne strony i portale internetowe – od prostych wizytówek po zaawansowane sklepy.</p>
+                <div class="competency-actions">
+                    <span class="overlay-trigger">Poznaj szczegóły ▸</span>
+                    <span class="case-trigger" data-category="WWW">🎯 Prześlij projekt WWW</span>
+                </div>
+            </div>
+
+            <!-- Web Apps -->
+            <div class="competency-card" data-overlay="webapps">
+                <div class="competency-icon">⚙️</div>
+                <h3>Aplikacje Webowe</h3>
+                <p class="short-desc">Dedykowane aplikacje internetowe – panele administracyjne, CRM, ERP, platformy rezerwacyjne.</p>
+                <div class="competency-actions">
+                    <span class="overlay-trigger">Poznaj szczegóły ▸</span>
+                    <span class="case-trigger" data-category="Aplikacje Webowe">🎯 Prześlij projekt App</span>
+                </div>
+            </div>
+
+            <!-- IoT -->
+            <div class="competency-card" data-overlay="iot">
+                <div class="competency-icon">📡</div>
+                <h3>Internet Rzeczy (IoT)</h3>
+                <p class="short-desc">Rozwiązania łączące urządzenia fizyczne z oprogramowaniem – monitorowanie, automatyzacja, analiza.</p>
+                <div class="competency-actions">
+                    <span class="overlay-trigger">Poznaj szczegóły ▸</span>
+                    <span class="case-trigger" data-category="IoT">🎯 Prześlij projekt IoT</span>
+                </div>
+            </div>
+
+            <!-- Optimization -->
+            <div class="competency-card" data-overlay="opt">
+                <div class="competency-icon">🚀</div>
+                <h3>Optymalizacja</h3>
+                <p class="short-desc">Audyt i poprawa wydajności istniejących systemów IT – strony, aplikacje, infrastruktura.</p>
+                <div class="competency-actions">
+                    <span class="overlay-trigger">Poznaj szczegóły ▸</span>
+                    <span class="case-trigger" data-category="Optymalizacja">🎯 Prześlij projekt optymalizacji</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Study CTA Section -->
+    <div class="case-cta">
+        <h3>🎯 Masz konkretny projekt do omówienia?</h3>
+        <p>Skorzystaj z naszego formularza "Projekt Case" aby przesłać szczegóły projektu. Zapewniamy priorytetową obsługę i kwalifikację do odpowiedniego zespołu specjalistów.</p>
+        <button class="btn btn-case" id="sectionCaseTrigger">Prześlij swój projekt case</button>
+    </div>
+
+    <!-- Portfolio Section -->
+    <section class="section" id="realizacje">
+        <h2 class="section-title">Realizacje</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-overlay="mpbruk">
+                <div class="portfolio-caption">
+                    <h3>MP Bruk&Clean</h3>
+                    <p>Kompleksowa strona internetowa dla firmy brukarskiej</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="kontakt">
+        <h2 class="section-title">Kontakt</h2>
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <h3>Dane kontaktowe</h3>
+                <ul class="contact-details">
+                    <li><i>📧</i> biuro@vis-sol.pl</li>
+                    <li><i>📱</i> 783 864 780</li>
+                    <li><i>📍</i> Praca zdalna + dojazd do klienta na terenie całego kraju</li>
+                    <li><i>⏰</i> Pon-Pt: 9:00-17:00</li>
+                </ul>
+                <p style="opacity: 0.8; font-size: 0.9rem; margin-top: 2rem;">
+                    Darmowy hosting zapewnia PRV.PL
+                </p>
+
+                <div class="footer-cta">
+                    <h3 style="color: var(--warning); margin-top: 2rem; font-size: 1.2rem;">Szybkie zgłoszenie projektu</h3>
+                    <button class="btn btn-case" style="margin-top: 1rem; width: 100%;" id="footerCaseTrigger">
+                        🎯 Prześlij projekt case
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="color: var(--accent); margin-bottom: 1.5rem; font-size: 1.6rem;">Wyślij wiadomość</h3>
+                <!-- ZMIENIONY FORMULARZ KONTAKTOWY -->
+                <form id="contactForm" method="POST" action="send_email.php">
+                    <div class="form-row">
+                        <input type="text" name="name" placeholder="Imię i nazwisko *" required id="name">
+                        <input type="email" name="email" placeholder="Adres email *" required id="email">
+                    </div>
+
+                    <div class="form-row">
+                        <input type="tel" name="phone" placeholder="Numer telefonu" id="phone">
+                        <input type="text" name="subject" placeholder="Temat wiadomości" id="subject">
+                    </div>
+
+                    <textarea rows="6" name="message" placeholder="Treść wiadomości *" required id="message"></textarea>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent">
+                            Wyrażam zgodę na przetwarzanie moich danych osobowych w celu kontaktu przez Vis-Sol.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Wyślij wiadomość</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Z LINKAMI SPOŁECZNOŚCIOWYMI -->
+    <footer>
+        <p>© 2025 Vis-Sol. Wszelkie prawa zastrzeżone.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">Intelligent Visual Solutions</p>
+
+        <!-- DODANE LINKI SPOŁECZNOŚCIOWE -->
+        <div class="social-links" style="margin-top: 2rem; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="https://www.linkedin.com/company/vis-sol/" target="_blank" style="color: #e0f0ff; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.3s ease;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://www.facebook.com/people/Vis-Sol/100083169240429/" target="_blank" style="color: #e0f0ff; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.3s ease;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span>Facebook</span>
+            </a>
+        </div>
+
+        <div style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.6;">
+            <p>Formularz "Projekt Case" zapewnia priorytetową kwalifikację projektów.</p>
+        </div>
+    </footer>
+
+    <!-- Existing Overlays -->
+    <div id="overlay-www" class="overlay">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+            <h2>Strony i portale internetowe (WWW)</h2>
+            <p>Tworzymy nowoczesne, szybkie i w pełni responsywne strony internetowe – od prostych wizytówek po zaawansowane portale i sklepy internetowe.</p>
+
+            <h3>Co oferujemy w ramach tej kompetencji:</h3>
+            <ul class="overlay-list">
+                <li>Projekt graficzny (UX/UI) szyty na miarę</li>
+                <li>Kodowanie w najnowszych technologiach (HTML5, CSS3, JS, frameworki)</li>
+                <li>System zarządzania treścią (CMS – np. własny lub WordPress)</li>
+                <li>Optymalizacja pod wyszukiwarki (SEO on-page)</li>
+                <li>Przyspieszenie ładowania (Core Web Vitals, kompresja, CDN)</li>
+                <li>Integracje (Google Analytics, Search Console, Meta Pixel, płatności, newslettery)</li>
+                <li>Responsywność i dostępność (WCAG)</li>
+                <li>Bezpieczeństwo (SSL, ochrona przed atakami)</li>
+                <li>Wdrożenie na serwer i konfiguracja domeny</li>
+                <li>Szkolenie z obsługi i wsparcie posprzedażowe</li>
+            </ul>
+            <p><strong>Każda strona jest tworzona od podstaw pod Twoje potrzeby – nie używamy gotowych szablonów bez modyfikacji.</strong></p>
+
+            <div style="margin-top: 2.5rem; padding: 1.5rem; background: rgba(255, 170, 0, 0.05); border-radius: 10px; border: 1px solid rgba(255, 170, 0, 0.2);">
+                <h3 style="color: var(--warning); margin-top: 0;">Masz projekt strony WWW?</h3>
+                <p>Prześlij szczegóły przez formularz "Projekt Case" dla priorytetowej obsługi.</p>
+                <button class="btn btn-case" style="margin-top: 1rem;" data-category="WWW">🎯 Prześlij projekt WWW</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay-webapps" class="overlay">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+            <h2>Aplikacje webowe</h2>
+            <p>Dedykowane aplikacje internetowe działające w przeglądarce – panele administracyjne, systemy CRM, ERP, platformy rezerwacyjne i inne narzędzia biznesowe.</p>
+
+            <h3>Zakres usług:</h3>
+            <ul class="overlay-list">
+                <li>Analiza wymagań i projekt funkcjonalny</li>
+                <li>Projekt interfejsu użytkownika (UX/UI)</li>
+                <li>Programowanie frontend i backend</li>
+                <li>Bazy danych (MySQL, PostgreSQL, NoSQL)</li>
+                <li>API i integracje z zewnętrznymi systemami</li>
+                <li>Autoryzacja i role użytkowników</li>
+                <li>Hosting i skalowalność</li>
+                <li>Testy funkcjonalne i bezpieczeństwa</li>
+                <li>Wdrożenie i szkolenie personelu</li>
+                <li>Utrzymanie i rozwój w przyszłości</li>
+            </ul>
+            <p><strong>Tworzymy aplikacje, które realnie wspierają Twój biznes i rosną razem z nim.</strong></p>
+        </div>
+    </div>
+
+    <div id="overlay-iot" class="overlay">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+            <h2>Internet rzeczy (IoT)</h2>
+            <p>Rozwiązania łączące urządzenia fizyczne z oprogramowaniem – zdalne monitorowanie, automatyzacja i analiza danych w czasie rzeczywistym.</p>
+
+            <h3>Co realizujemy:</h3>
+            <ul class="overlay-list">
+                <li>Projekt architektury systemu IoT</li>
+                <li>Integracja czujników i urządzeń przemysłowych</li>
+                <li>Oprogramowanie embedded (firmware)</li>
+                <li>Backend i dashboard webowy</li>
+                <li>Przetwarzanie i wizualizacja danych</li>
+                <li>Automatyczne alerty i powiadomienia</li>
+                <li>Bezpieczeństwo transmisji danych</li>
+                <li>Skalowalność i chmura (AWS IoT, Azure IoT)</li>
+                <li>Wdrożenie pilotażowe i produkcyjne</li>
+                <li>Wsparcie techniczne 24/7 (opcjonalnie)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="overlay-opt" class="overlay">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+            <h2>Optymalizacja i utrzymanie</h2>
+            <p>Audyt i poprawa wydajności istniejących systemów IT – strony, aplikacje, infrastruktura.</p>
+
+            <h3>Zakres działań:</h3>
+            <ul class="overlay-list">
+                <li>Audyt wydajności i bezpieczeństwa</li>
+                <li>Optymalizacja kodu i bazy danych</li>
+                <li>Przyspieszenie ładowania stron (LCP, CLS)</li>
+                <li>Poprawa pozycjonowania (SEO techniczne)</li>
+                <li>Migracja na szybszy hosting/chmurę</li>
+                <li>Automatyzacja backupów i monitoringu</li>
+                <li>Aktualizacje i łatki bezpieczeństwa</li>
+                <li>Stałe wsparcie i rozwój</li>
+                <li>Raporty i rekomendacje</li>
+            </ul>
+            <p><strong>Pomagamy wydobyć maksimum z istniejących rozwiązań.</strong></p>
+        </div>
+    </div>
+
+    <div id="overlay-mpbruk" class="overlay">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+            <h2>MP Bruk&Clean</h2>
+            <p>Kompleksowa strona internetowa dla firmy brukarskiej</p>
+
+            <h3>Realizacja obejmowała:</h3>
+            <ul class="overlay-list">
+                <li>Nowoczesny design strony firmowej</li>
+                <li>Zaawansowana optymalizacja SEO</li>
+                <li>W pełni responsywny layout</li>
+                <li>System zarządzania treścią (CMS)</li>
+                <li>Integracja z Google Analytics</li>
+            </ul>
+            <div style="margin-top: 2.5rem; padding: 1.5rem; background: rgba(0, 240, 255, 0.05); border-radius: 10px; border: 1px solid var(--border);">
+                <h3 style="color: var(--accent); margin-top: 0;">Chcesz podobne rozwiązanie?</h3>
+                <p>Skorzystaj z formularza "Projekt Case" dla szczegółowej wyceny.</p>
+                <button class="btn btn-case" style="margin-top: 1rem;" data-category="WWW">🎯 Prześlij projekt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Case Project Overlay -->
+    <div id="overlay-case" class="overlay overlay-case">
+        <div class="overlay-content">
+            <button class="close-overlay">×</button>
+
+            <div class="form-header">
+                <div class="form-icon">🎯</div>
+                <div>
+                    <h2>Formularz Projekt Case <span class="priority-badge">PRIORYTET</span></h2>
+                    <p style="opacity: 0.9; margin-top: 0.5rem;">Prześlij szczegóły projektu dla priorytetowej kwalifikacji</p>
+                </div>
+            </div>
+
+            <div class="form-note">
+                <p><strong>ℹ️ Informacja:</strong> Wszystkie zgłoszenia z tego formularza trafiają do <strong>biuro@vis-sol.pl</strong> z kategorią <strong>"PROJEKT_CASE"</strong> i są obsługiwane z najwyższym priorytetem przez dedykowany zespół.</p>
+            </div>
+
+            <!-- ZMIENIONY FORMULARZ CASE -->
+            <form id="caseForm" class="case-form" method="POST" action="send_case.php">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Imię i nazwisko <span class="required">*</span></label>
+                        <input type="text" id="caseName" name="caseName" required placeholder="Jan Kowalski">
+                    </div>
+                    <div class="form-group">
+                        <label>Email firmowy <span class="required">*</span></label>
+                        <input type="email" id="caseEmail" name="caseEmail" required placeholder="jan.kowalski@firma.pl">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Numer telefonu</label>
+                        <input type="tel" id="casePhone" name="casePhone" placeholder="+48 123 456 789">
+                    </div>
+                    <div class="form-group">
+                        <label>Nazwa firmy</label>
+                        <input type="text" id="caseCompany" name="caseCompany" placeholder="Twoja Firma Sp. z o.o.">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kategoria projektu <span class="required">*</span></label>
+                    <select id="caseCategory" name="caseCategory" required>
+                        <option value="">-- Wybierz kategorię --</option>
+                        <option value="WWW">Strona WWW / Portal internetowy</option>
+                        <option value="Aplikacja Webowa">Aplikacja webowa (CRM, ERP, Panel)</option>
+                        <option value="IoT">Internet Rzeczy (IoT)</option>
+                        <option value="Optymalizacja">Optymalizacja systemu</option>
+                        <option value="AI">Rozwiązania AI / Data Science</option>
+                        <option value="Inne">Inny projekt</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Temat projektu <span class="required">*</span></label>
+                    <input type="text" id="caseSubject" name="caseSubject" required placeholder="np. 'System rezerwacji online dla hotelu'">
+                </div>
+
+                <div class="form-group">
+                    <label>Opis projektu / Pomysł <span class="required">*</span></label>
+                    <textarea id="caseDescription" name="caseDescription" required placeholder="Opisz szczegółowo swój projekt, potrzeby biznesowe, oczekiwane funkcjonalności..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Budżet (opcjonalnie)</label>
+                    <select id="caseBudget" name="caseBudget">
+                        <option value="">-- Wybierz przedział budżetowy --</option>
+                        <option value="5-10k">5 000 - 10 000 PLN</option>
+                        <option value="10-25k">10 000 - 25 000 PLN</option>
+                        <option value="25-50k">25 000 - 50 000 PLN</option>
+                        <option value="50-100k">50 000 - 100 000 PLN</option>
+                        <option value="100k+">Powyżej 100 000 PLN</option>
+                        <option value="nieokreślony">Do ustalenia</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Planowany termin realizacji</label>
+                    <select id="caseTimeline" name="caseTimeline">
+                        <option value="">-- Wybierz termin --</option>
+                        <option value="pilnie">Pilnie (w ciągu 1 miesiąca)</option>
+                        <option value="1-3mies">1-3 miesięcy</option>
+                        <option value="3-6mies">3-6 miesięcy</option>
+                        <option value="6mies+">Powyżej 6 miesięcy</option>
+                        <option value="nieokreślony">Nieokreślony</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="caseConsent" name="caseConsent" required>
+                    <label for="caseConsent">
+                        Wyrażam zgodę na przetwarzanie moich danych osobowych w celu realizacji zgłoszenia projektu. Zgłoszenie trafi na biuro@vis-sol.pl z kategorią PRIORYTET.
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-case" style="flex: 1;">🎯 Wyślij projekt case</button>
+                    <button type="button" class="btn btn-secondary" id="caseFormCancel" style="flex: 0.5;">Anuluj</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create animated background elements
+        function createBackground() {
+            const background = document.getElementById('ai-background');
+
+            // Create neurons (dots)
+            for (let i = 0; i < 50; i++) {
+                const neuron = document.createElement('div');
+                neuron.className = 'neuron';
+                neuron.style.left = `${Math.random() * 100}%`;
+                neuron.style.top = `${Math.random() * 100}%`;
+                neuron.style.animationDelay = `${Math.random() * 3}s`;
+                neuron.style.animationDuration = `${2 + Math.random() * 3}s`;
+                background.appendChild(neuron);
+            }
+        }
+
+        // Case Form Management
+        let selectedCategory = '';
+
+        function initCaseForm() {
+            const caseOverlay = document.getElementById('overlay-case');
+            const caseForm = document.getElementById('caseForm');
+            const cancelBtn = document.getElementById('caseFormCancel');
+
+            // Open case form from various triggers
+            const triggers = [
+                ...document.querySelectorAll('.case-trigger'),
+                document.getElementById('heroCaseTrigger'),
+                document.getElementById('sectionCaseTrigger'),
+                document.getElementById('footerCaseTrigger'),
+                document.getElementById('globalCaseTrigger')
+            ];
+
+            triggers.forEach(trigger => {
+                if (trigger) {
+                    trigger.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        // Check if trigger has specific category
+                        if (this.hasAttribute('data-category')) {
+                            selectedCategory = this.getAttribute('data-category');
+                            document.getElementById('caseCategory').value = selectedCategory;
+                        } else {
+                            selectedCategory = '';
+                            document.getElementById('caseCategory').value = '';
+                        }
+
+                        // Show overlay
+                        caseOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+
+                        // Focus on first field
+                        setTimeout(() => {
+                            document.getElementById('caseName').focus();
+                        }, 300);
+                    });
+                }
+            });
+
+            // Close case form
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    caseOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    selectedCategory = '';
+                });
+            }
+
+            // Handle form submission
+            if (caseForm) {
+                caseForm.addEventListener('submit', function(e) {
+                    // Let the form submit naturally to PHP
+                    // Optional: Add loading state
+                    const submitBtn = caseForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Wysyłanie...';
+                    submitBtn.disabled = true;
+
+                    // Re-enable after 5 seconds in case of error
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }, 5000);
+                });
+            }
+        }
+
+        // Overlay Management (existing)
+        function initOverlays() {
+            // Open overlay when clicking competency cards or portfolio items
+            document.querySelectorAll('[data-overlay]').forEach(element => {
+                element.addEventListener('click', function() {
+                    const overlayId = 'overlay-' + this.getAttribute('data-overlay');
+                    const overlay = document.getElementById(overlayId);
+                    if (overlay) {
+                        overlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            // Close overlay when clicking close button
+            document.querySelectorAll('.close-overlay').forEach(button => {
+                button.addEventListener('click', function() {
+                    const overlay = this.closest('.overlay');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // Close overlay when clicking outside content
+            document.querySelectorAll('.overlay').forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === this && !this.id.includes('case')) {
+                        this.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Close overlay with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.overlay.active').forEach(overlay => {
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+            });
+        }
+
+        // Mobile menu toggle
+        function initMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close menu when clicking a link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
+        }
+
+        // Form submission (regular contact form)
+        function initForm() {
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    // Let the form submit naturally to PHP
+                    // Optional: Add loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+
+                    submitBtn.textContent = 'Wysyłanie...';
+                    submitBtn.disabled = true;
+
+                    // Re-enable after 5 seconds in case of error
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }, 5000);
+                });
+            }
+        }
+
+        // Add scroll effect to navbar
+        function initScrollEffects() {
+            window.addEventListener('scroll', function() {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 50) {
+                    nav.style.padding = '0.8rem 5vw';
+                    nav.style.background = 'rgba(10, 14, 23, 0.98)';
+                } else {
+                    nav.style.padding = '1.2rem 5vw';
+                    nav.style.background = 'rgba(10, 14, 23, 0.95)';
+                }
+            });
+
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards and items
+            document.querySelectorAll('.competency-card, .about-card, .portfolio-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            createBackground();
+            initOverlays();
+            initCaseForm();
+            initMobileMenu();
+            initForm();
+            initScrollEffects();
+        });
+    </script>
+</body>
+</html>
