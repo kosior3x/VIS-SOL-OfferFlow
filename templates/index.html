@@ -17,12 +17,30 @@
         .btn { padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
         
         /* Styl do druku - tu znikają pola edycji, zostaje czysty tekst */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
         @media print {
             .no-print, button, input, textarea { display: none !important; }
             .print-only { display: block !important; }
             body { background: white; padding: 0; }
-            .app-container { box-shadow: none; border: none; width: 100%; }
-            .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 80px; color: rgba(0,0,0,0.05); z-index: -1; }
+            .app-container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                padding: 0;
+            }
+            .watermark {
+                position: fixed;
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+                font-size: 120px;
+                color: rgba(0, 0, 0, 0.08);
+                z-index: -1;
+                font-weight: bold;
+            }
         }
         .print-only { display: none; }
     </style>
