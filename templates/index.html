@@ -24,7 +24,7 @@
         /* Styl do druku */
         @page {
             size: A4;
-            margin: 20mm 15mm;
+            margin: 0;
         }
         @media print {
             .no-print, button, input, textarea { display: none !important; }
@@ -54,7 +54,8 @@
             .content-wrapper {
                 position: relative;
                 z-index: 2;
-                padding: 0;
+                padding: 20mm 25mm;
+                box-sizing: border-box;
             }
             .grid { gap: 10px; margin-bottom: 10px; }
             .section { margin-bottom: 5px; }
