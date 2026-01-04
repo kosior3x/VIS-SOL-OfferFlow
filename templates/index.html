@@ -3,30 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vis-Sol - Profesjonalny System Ofertowy</title>
+    <title>Vis-Sol - Professional Quote System</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root { --vs-dark: #003049; --vs-red: #d62828; --vs-accent: #f77f00; --vs-light: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: var(--vs-light); color: #333; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        header { border-bottom: 5px solid var(--vs-dark); margin-bottom: 30px; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
-        h1 { margin: 0; color: var(--vs-dark); font-size: 32px; }
-        .section { margin-bottom: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #7f8c8d; display: block; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { background: var(--vs-dark); color: white; padding: 12px; font-size: 13px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
-        .summary-box { background: var(--vs-dark); color: white; padding: 30px; border-radius: 10px; text-align: right; }
-        .final-price { font-size: 2.5em; font-weight: 900; color: var(--vs-accent); margin-top: 10px; }
-        .btn { padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; text-transform: uppercase; }
-        .btn-add { background: #27ae60; color: white; margin-top: 15px; }
-        .btn-pdf { background: var(--vs-red); color: white; width: 100%; margin-top: 30px; font-size: 18px; letter-spacing: 1px; }
-        .btn:disabled { background: #bdc3c7; cursor: not-allowed; }
-        .checkbox-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 14px; cursor: pointer; }
-        .checkbox-item input { width: auto; }
+        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: var(--vs-light); padding: 20px; font-size: 13px; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        header { border-bottom: 3px solid var(--vs-dark); margin-bottom: 20px; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        label { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #888; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th { background: var(--vs-dark); color: white; padding: 8px; text-align: left; }
+        .summary-box { background: var(--vs-dark); color: white; padding: 20px; border-radius: 8px; text-align: right; }
+        .final-price { font-size: 2em; font-weight: 900; color: var(--vs-accent); }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn-pdf { background: var(--vs-red); color: white; width: 100%; margin-top: 20px; font-size: 16px; }
+        .btn:disabled { background: #ccc; }
     </style>
 </head>
 <body>
@@ -34,70 +29,68 @@
 <div class="container">
     <header>
         <div>
-            <h1>VIS-SOL</h1>
-            <div id="oh_display" style="font-weight:bold; color: var(--vs-red); font-size: 18px; margin-top: 5px;"></div>
+            <h1 style="margin:0; color: var(--vs-dark);">VIS-SOL</h1>
+            <div id="oh_display" style="font-weight:bold; color: var(--vs-red);"></div>
         </div>
-        <div style="text-align: right;">
+        <div style="text-align: right; font-size: 11px;">
             <a href="http://vis-sol.prv.pl" style="text-decoration:none; color: var(--vs-dark); font-weight:bold;">vis-sol.prv.pl</a>
         </div>
     </header>
 
     <div class="grid">
         <div class="section">
-            <label>Wystawca (Dane Oferenta)</label>
-            <input type="text" id="off_name" value="Vis-Sol Visuals and Solutions" onchange="saveData()">
-            <input type="text" id="off_contact" placeholder="Email / Telefon / Adres" onchange="saveData()">
+            <label>Wystawca i Dane Kontaktowe</label>
+            <input type="text" id="off_name" value="Vis-Sol Visuals and Solutions" style="font-weight:bold; margin-bottom:5px;">
+            <textarea id="off_details" rows="3" placeholder="Adres, NIP, Osoba kontaktowa, Nr tel, E-mail"></textarea>
         </div>
         <div class="section">
-            <label>Dane Klienta</label>
-            <input type="text" id="cli_name" placeholder="Nazwa firmy lub Imię i Nazwisko">
-            <input type="text" id="cli_nip" placeholder="NIP (opcjonalnie)">
+            <label>Dane Klienta i Odbiorcy</label>
+            <input type="text" id="cli_name" placeholder="Nazwa firmy / Imię i Nazwisko" style="margin-bottom:5px;">
+            <textarea id="cli_details" rows="3" placeholder="Adres, NIP, Telefon osoby kontaktowej"></textarea>
         </div>
     </div>
 
     <div class="section">
-        <label>Specyfikacja techniczna i kosztorys</label>
+        <label>Kosztorys i Specyfikacja</label>
         <table id="mainTable">
             <thead>
                 <tr>
+                    <th style="width: 40px;">LP</th>
                     <th>Opis usługi / materiału</th>
-                    <th style="width: 70px;">Jm</th>
-                    <th style="width: 80px;">Ilość</th>
-                    <th style="width: 120px;">Cena Netto</th>
-                    <th style="width: 90px;">VAT</th>
-                    <th style="width: 130px;">Suma Brutto</th>
+                    <th style="width: 60px;">Jm</th>
+                    <th style="width: 70px;">Ilość</th>
+                    <th style="width: 100px;">Cena Netto</th>
+                    <th style="width: 80px;">VAT</th>
+                    <th style="width: 110px;">Brutto</th>
                 </tr>
             </thead>
             <tbody id="tbody"></tbody>
         </table>
-        <button class="btn btn-add" onclick="addRow()">+ Dodaj nową pozycję</button>
+        <button class="btn" style="background:#27ae60; color:white; margin-top:10px;" onclick="addRow()">+ Nowa Pozycja</button>
     </div>
 
     <div class="grid">
         <div class="section">
-            <label>Warunki Handlowe i Zabezpieczenia</label>
-            <input type="text" id="validity" value="Termin ważności oferty: 14 dni" style="margin-bottom:10px;">
-            <input type="text" id="payment" value="Warunki płatności: 50% zaliczka / 50% po realizacji" style="margin-bottom:10px;">
-            <input type="text" id="warranty" value="Gwarancja: 24 miesiące na wykonane prace" style="margin-bottom:10px;">
+            <label>Informacje Handlowe (Zabezpieczenia)</label>
+            <input type="text" id="validity" value="Termin ważności oferty: 14 dni" style="margin-bottom:5px;">
+            <input type="text" id="payment" value="Warunki płatności: 25% zaliczka / 50% po realizacji" style="margin-bottom:5px;">
+            <input type="text" id="warranty" value="Gwarancja: 24 miesiące na wykonane prace">
             
-            <div style="margin-top:15px;">
-                <label class="checkbox-item"><input type="checkbox" id="c1" onclick="check()"> Akceptuję regulamin i warunki współpracy Vis-Sol</label>
-                <label class="checkbox-item"><input type="checkbox" id="c2" onclick="check()"> Zgoda na przetwarzanie danych (RODO)</label>
+            <div style="margin-top:10px; font-size: 11px;">
+                <input type="checkbox" id="c1" onclick="check()"> Akceptuję regulamin Vis-Sol<br>
+                <input type="checkbox" id="c2" onclick="check()"> Zgoda RODO
             </div>
         </div>
         <div class="summary-box">
-            <label style="color: #bdc3c7;">Podsumowanie finansowe</label>
-            <div style="font-size: 16px;">Suma Netto: <span id="sNet">0.00</span> PLN</div>
-            <div style="font-size: 16px; color: #ffadad; margin: 5px 0;">
-                Upust/Rabat: -<input type="number" id="discount" value="0" style="width:80px; padding:2px; display:inline;" oninput="calc()"> PLN
-            </div>
-            <div style="font-size: 16px;">Wartość VAT: <span id="sVat">0.00</span> PLN</div>
+            <div style="font-size: 14px;">Netto po rabacie: <span id="sNet">0.00</span> PLN</div>
+            <div style="color: #ffadad;">Rabat: -<input type="number" id="discount" value="0" style="width:60px; background:none; border:1px solid #777; color:white;" oninput="calc()"> PLN</div>
+            <div style="font-size: 14px;">Wartość VAT: <span id="sVat">0.00</span> PLN</div>
             <div class="final-price"><span id="sTotal">0.00</span> PLN</div>
-            <div style="font-size: 12px; opacity: 0.8;">Łączna kwota do zapłaty (Brutto)</div>
+            <div style="font-size: 10px; opacity: 0.8;">ŁĄCZNA KWOTA DO ZAPŁATY BRUTTO</div>
         </div>
     </div>
 
-    <button class="btn btn-pdf" id="btnPdf" disabled onclick="generatePDF()">Generuj Ofertę PDF (System OH)</button>
+    <button class="btn btn-pdf" id="btnPdf" disabled onclick="generatePDF()">GENERUJ OFERTĘ PDF (OH)</button>
 </div>
 
 <script>
@@ -106,30 +99,25 @@
 
     window.onload = () => {
         const d = new Date();
-        const randomID = Math.floor(100 + Math.random() * 900);
-        ohNumber = `OH/${d.getFullYear()}/${(d.getMonth() + 1)}/${randomID}`;
+        ohNumber = `OH/${d.getFullYear()}/${(d.getMonth() + 1)}/${Math.floor(100 + Math.random() * 900)}`;
         document.getElementById('oh_display').innerText = "NR: " + ohNumber;
-        loadData();
         addRow();
     };
 
     function addRow() {
+        const tbody = document.getElementById('tbody');
+        const lp = tbody.rows.length + 1;
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><input type="text" class="p_desc" placeholder="Opis pozycji"></td>
+            <td>${lp}</td>
+            <td><input type="text" class="p_desc" placeholder="Opis"></td>
             <td><input type="text" class="p_jm" value="szt."></td>
             <td><input type="number" class="p_qty" value="1" oninput="calc()"></td>
             <td><input type="number" class="p_price" value="0" oninput="calc()"></td>
-            <td>
-                <select class="p_vat" onchange="calc()">
-                    <option value="0.23">23%</option>
-                    <option value="0.08">8%</option>
-                    <option value="0">zw</option>
-                </select>
-            </td>
+            <td><select class="p_vat" onchange="calc()"><option value="0.23">23%</option><option value="0.08">8%</option><option value="0">zw</option></select></td>
             <td class="p_brutto" style="font-weight:bold">0.00</td>
         `;
-        document.getElementById('tbody').appendChild(tr);
+        tbody.appendChild(tr);
     }
 
     function calc() {
@@ -139,56 +127,50 @@
             const p = parseFloat(row.querySelector('.p_price').value) || 0;
             const v = parseFloat(row.querySelector('.p_vat').value) || 0;
             const rowNet = q * p;
-            const rowVat = rowNet * v;
-            row.querySelector('.p_brutto').innerText = (rowNet + rowVat).toFixed(2);
-            net += rowNet; vat += rowVat;
+            row.querySelector('.p_brutto').innerText = (rowNet * (1 + v)).toFixed(2);
+            net += rowNet; vat += (rowNet * v);
         });
-
-        const discount = parseFloat(document.getElementById('discount').value) || 0;
-        const finalNet = net - discount;
-        const finalVat = vat - (discount * 0.23 > vat ? vat : discount * 0.23);
-        const finalBrutto = finalNet + finalVat;
-
-        document.getElementById('sNet').innerText = finalNet.toFixed(2);
-        document.getElementById('sVat').innerText = finalVat.toFixed(2);
-        document.getElementById('sTotal').innerText = finalBrutto.toFixed(2);
+        const disc = parseFloat(document.getElementById('discount').value) || 0;
+        const fNet = net - disc;
+        const fVat = vat - (disc * 0.23 > vat ? vat : disc * 0.23);
+        document.getElementById('sNet').innerText = fNet.toFixed(2);
+        document.getElementById('sVat').innerText = Math.max(0, fVat).toFixed(2);
+        document.getElementById('sTotal').innerText = (fNet + Math.max(0, fVat)).toFixed(2);
     }
 
     function check() {
-        const c1 = document.getElementById('c1').checked;
-        const c2 = document.getElementById('c2').checked;
-        document.getElementById('btnPdf').disabled = !(c1 && c2);
-    }
-
-    function saveData() {
-        localStorage.setItem('vs_pro_name', document.getElementById('off_name').value);
-        localStorage.setItem('vs_pro_contact', document.getElementById('off_contact').value);
-    }
-
-    function loadData() {
-        document.getElementById('off_name').value = localStorage.getItem('vs_pro_name') || 'Vis-Sol Visuals and Solutions';
-        document.getElementById('off_contact').value = localStorage.getItem('vs_pro_contact') || '';
+        document.getElementById('btnPdf').disabled = !(document.getElementById('c1').checked && document.getElementById('c2').checked);
     }
 
     function generatePDF() {
         const doc = new jsPDF();
-        const safeOH = ohNumber.replace(/\//g, '_');
         
-        doc.setTextColor(240); doc.setFontSize(55); 
-        doc.text("VIS-SOL OFFICIAL", 30, 150, {angle:45});
-        
-        doc.setTextColor(0, 48, 73); doc.setFontSize(22);
-        doc.text("OFERTA HANDLOWA " + ohNumber, 15, 25);
-        
-        doc.setFontSize(10); doc.setTextColor(80);
-        doc.text(`Wystawca: ${document.getElementById('off_name').value}`, 15, 40);
-        doc.text(`Kontakt: ${document.getElementById('off_contact').value}`, 15, 45);
-        doc.text(`Klient: ${document.getElementById('cli_name').value}`, 120, 40);
-        doc.text(`NIP Klienta: ${document.getElementById('cli_nip').value}`, 120, 45);
+        // Znak wodny
+        doc.setTextColor(245); doc.setFontSize(50);
+        doc.text("VIS-SOL OFFICIAL", 40, 150, {angle:45});
 
+        // Nagłówek
+        doc.setTextColor(0, 48, 73); doc.setFontSize(18);
+        doc.text("OFERTA HANDLOWA " + ohNumber, 15, 20);
+
+        // Dane stron (Zmniejszona czcionka)
+        doc.setFontSize(9); doc.setTextColor(50);
+        doc.text("WYSTAWCA:", 15, 35);
+        doc.setFontSize(8); doc.setTextColor(80);
+        const offLines = doc.splitTextToSize(document.getElementById('off_name').value + "\n" + document.getElementById('off_details').value, 80);
+        doc.text(offLines, 15, 40);
+
+        doc.setFontSize(9); doc.setTextColor(50);
+        doc.text("KLIENT:", 115, 35);
+        doc.setFontSize(8); doc.setTextColor(80);
+        const cliLines = doc.splitTextToSize(document.getElementById('cli_name').value + "\n" + document.getElementById('cli_details').value, 80);
+        doc.text(cliLines, 115, 40);
+
+        // Tabela z LP
         const tableData = [];
-        document.querySelectorAll('#tbody tr').forEach(r => {
+        document.querySelectorAll('#tbody tr').forEach((r, i) => {
             tableData.push([
+                i + 1,
                 r.querySelector('.p_desc').value,
                 r.querySelector('.p_jm').value,
                 r.querySelector('.p_qty').value,
@@ -199,34 +181,35 @@
         });
 
         doc.autoTable({
-            startY: 55,
-            head: [['Opis pozycji', 'Jm', 'Ilość', 'Cena Netto', 'VAT', 'Wartość Brutto']],
+            startY: 65,
+            head: [['LP', 'Opis pozycji', 'Jm', 'Ilość', 'Cena Netto', 'VAT', 'Wartość Brutto']],
             body: tableData,
-            headStyles: { fillColor: [0, 48, 73] },
-            styles: { fontSize: 9 }
+            headStyles: { fillColor: [0, 48, 73], fontSize: 8 },
+            styles: { fontSize: 8, font: "helvetica" }
         });
 
-        let finalY = doc.lastAutoTable.finalY + 15;
-        
-        doc.setFontSize(10); doc.setTextColor(50);
-        doc.text(`Suma Netto po rabacie: ${document.getElementById('sNet').innerText} PLN`, 195, finalY, {align:'right'});
-        doc.text(`Wartość podanego upustu: -${document.getElementById('discount').value} PLN`, 195, finalY + 6, {align:'right'});
-        
-        doc.setFontSize(16); doc.setTextColor(214, 48, 49);
-        doc.text(`KWOTA DO ZAPŁATY BRUTTO: ${document.getElementById('sTotal').innerText} PLN`, 195, finalY + 18, {align:'right'});
+        let finalY = doc.lastAutoTable.finalY + 10;
 
-        doc.setFontSize(9); doc.setTextColor(100);
-        doc.text("INFORMACJE DODATKOWE I WARUNKI:", 15, finalY + 35);
-        doc.text(`* ${document.getElementById('validity').value}`, 15, finalY + 41);
-        doc.text(`* ${document.getElementById('payment').value}`, 15, finalY + 47);
-        doc.text(`* ${document.getElementById('warranty').value}`, 15, finalY + 53);
-        doc.text("* Zastrzeżenie: Ceny materiałów mogą ulec zmianie przy skokach rynkowych o +/- 10%.", 15, finalY + 59);
-        doc.text("* Oferta zaakceptowana elektronicznie stanowi wiążącą podstawę do realizacji.", 15, finalY + 65);
+        // Podsumowanie
+        doc.setFontSize(9); doc.setTextColor(50);
+        doc.text(`Suma Netto: ${document.getElementById('sNet').innerText} PLN`, 195, finalY, {align:'right'});
+        doc.text(`Upust: -${document.getElementById('discount').value} PLN`, 195, finalY + 5, {align:'right'});
         
-        doc.setFontSize(8);
+        doc.setFontSize(14); doc.setTextColor(214, 48, 49);
+        doc.text(`KWOTA DO ZAPŁATY: ${document.getElementById('sTotal').innerText} PLN`, 195, finalY + 15, {align:'right'});
+
+        // Warunki (Bez krzaków - używamy standardowych znaków łacińskich tam, gdzie PDF nie radzi sobie z UTF-8)
+        doc.setFontSize(8); doc.setTextColor(100);
+        doc.text("INFORMACJE DODATKOWE I WARUNKI:", 15, finalY + 25);
+        doc.text("* " + document.getElementById('validity').value, 15, finalY + 31);
+        doc.text("* " + document.getElementById('payment').value, 15, finalY + 36);
+        doc.text("* " + document.getElementById('warranty').value, 15, finalY + 41);
+        doc.text("* Zastrzezenie: Ceny materialow moga ulec zmianie o +/- 10% przy skokach rynkowych.", 15, finalY + 46);
+        doc.text("* Oferta zaakceptowana elektronicznie stanowi wiążącą podstawe do realizacji.", 15, finalY + 51);
+
         doc.text("Wygenerowano przez system Vis-Sol | vis-sol.prv.pl", 105, 285, {align:'center'});
 
-        doc.save(`oferta_nr_${safeOH}.pdf`);
+        doc.save(`oferta_nr_${ohNumber.replace(/\//g,'_')}.pdf`);
     }
 </script>
 </body>
