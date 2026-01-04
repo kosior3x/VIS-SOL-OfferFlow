@@ -146,10 +146,32 @@
         
         // Zamień inputy w tabeli na tekst tylko do druku
         document.querySelectorAll('#tbody tr').forEach(r => {
-            const desc = r.querySelector('.d').value;
-            r.cells[1].innerHTML = `<span>${desc}</span>`;
-            const jm = r.querySelector('.j').value;
-            r.cells[2].innerHTML = `<span>${jm}</span>`;
+            // Opis
+            const descInput = r.querySelector('.d');
+            if (descInput) descInput.parentElement.innerHTML = `<span>${descInput.value}</span>`;
+
+            // Jm
+            const jmInput = r.querySelector('.j');
+            if (jmInput) jmInput.parentElement.innerHTML = `<span>${jmInput.value}</span>`;
+
+            // Ilość
+            const qInput = r.querySelector('.q');
+            if (qInput) qInput.parentElement.innerHTML = `<span>${qInput.value}</span>`;
+
+            // Cena Netto
+            const cnSpan = r.querySelector('.cn');
+            if (cnSpan) cnSpan.parentElement.innerHTML = `<span>${cnSpan.innerText}</span>`;
+
+            // VAT
+            const vatSelect = r.querySelector('.v');
+            if (vatSelect) {
+                const vatText = vatSelect.options[vatSelect.selectedIndex].text;
+                vatSelect.parentElement.innerHTML = `<span>${vatText}</span>`;
+            }
+
+            // Brutto
+            const cbSpan = r.querySelector('.cb');
+            if (cbSpan) cbSpan.parentElement.innerHTML = `<span>${cbSpan.innerText}</span>`;
         });
 
         window.print();
