@@ -1,19 +1,20 @@
+# Startujemy z lekkiego Pythona
 FROM python:3.9-slim
 
-# Ustawienie katalogu roboczego
+# Katalog roboczy w kontenerze
 WORKDIR /app
 
-# Kopiowanie plików konfiguracji
+# Kopiujemy plik z listą bibliotek
 COPY requirements.txt .
 
-# Instalacja z wymuszeniem braku cache (żeby uniknąć błędów)
+# Instalujemy Flask
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiowanie reszty kodu
+# Kopiujemy całą zawartość Vis-Sol do kontenera
 COPY . .
 
-# Wystawienie portu
+# Port, na którym działa program
 EXPOSE 5000
 
-# Start aplikacji
+# Start Alexa i Twojego programu
 CMD ["python", "app.py"]
